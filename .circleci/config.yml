@@ -42,4 +42,4 @@ jobs:
 
       # upload coverage results to codecov
       - codecov/upload:
-          file: "scoverage.xml"
+          file: "./target/scoverage-report/scoverage.xml"
