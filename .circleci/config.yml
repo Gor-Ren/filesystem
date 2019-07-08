@@ -40,6 +40,6 @@ jobs:
       # run tests with coverage
       - run: cat /dev/null | sbt coverage test:test coverageReport
 
-      # upload test coverage results to codecov
+      # upload coverage results to codecov
       - codecov/upload:
           file: {{ coverage_report_filepath }}
