@@ -1,10 +1,10 @@
 package gor.files
 
-class Directory(override val parentPath: String, override val name: String,
-                val contents: List[DirectoryEntry])
-  extends DirectoryEntry(parentPath, name) {
-
-}
+class Directory(
+    override val parentPath: String,
+    override val name: String,
+    val contents: List[DirectoryEntry]
+) extends DirectoryEntry(parentPath, name) {}
 
 object Directory {
   val SEPARATOR = "/"

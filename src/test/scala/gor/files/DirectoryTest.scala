@@ -2,7 +2,6 @@ package gor.files
 
 import org.scalatest.{FlatSpec, Matchers}
 
-
 class DirectoryTest extends FlatSpec with Matchers {
 
   behavior of "empty Directory factory method"
