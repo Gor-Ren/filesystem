@@ -1,6 +1,6 @@
 package gor.filesystem
 
-import gor.files.Directory
+import gor.files.{Directory, DirectoryEntry}
 
 /**
   * Contains the state of the file system.
@@ -10,7 +10,6 @@ import gor.files.Directory
   * @param output the most recent user output from the file system
   */
 class State(val root: Directory, val wd: Directory, val output: String) {
-
   def show(): Unit = {
     println(output)
     print(State.SHELL_TOKEN)

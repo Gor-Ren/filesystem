@@ -17,7 +17,20 @@ class ErrorCommandTest extends FlatSpec with Matchers {
 
   it should "return the same state" in {
     ErrorCommand.empty
-      .apply(state) should be theSameInstanceAs state
+      .apply(state)
+      .output shouldBe empty
+  }
+
+  it should "not change the root dir" in {
+    ErrorCommand.empty
+      .apply(state)
+      .root shouldEqual state.root
+  }
+
+  it should "not change the working dir" in {
+    ErrorCommand.empty
+      .apply(state)
+      .wd shouldEqual state.wd
   }
 
   behavior of "Unknown Command"

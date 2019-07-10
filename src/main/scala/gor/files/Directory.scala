@@ -6,9 +6,14 @@ class Directory(
     val contents: List[DirectoryEntry]
 ) extends DirectoryEntry(parentPath, name) {
 
+  def getAllFoldersInPath: List[String] = ???
+
   /** Tests if this directory contains an entry with the input name. */
   def hasEntry(name: String): Boolean =
     contents.exists(e => e.name.equals(name))
+
+  def findDescendant(path: List[String]): Directory = ???
+
 }
 
 object Directory {

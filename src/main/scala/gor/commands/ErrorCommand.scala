@@ -1,7 +1,7 @@
 package gor.commands
 
 object ErrorCommand {
-  def empty: Command = state => state
+  def empty: Command = state => state.setMessage("")
 
   def unknownCommand: Command =
     state => state.setMessage("Command not found.")
