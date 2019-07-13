@@ -1,24 +1,20 @@
 package gor.filesystem
 
-import java.io.{InputStream, OutputStream}
-import java.util.Scanner
-
 import gor.commands.Command
 import gor.files.Directory
-import gor.filesystem.Filesystem.state
+import gor.filesystem.Filesystem.root
+import gor.view.{ConsoleView, FilesystemView}
 
 /** The entry point and main control loop of the filesystem application. */
-class Filesystem(input: InputStream, output: OutputStream) {
+class Filesystem(view: FilesystemView) {
+
+  var state: State = State(root, root, "")
 
   def run(): Unit = {
-    val scanner = new Scanner(input)
-
-    Console.withOut(output) {
-      while (true) {
-        state.show()
-        val input = scanner.nextLine()
-        state = Command.from(input).apply(state)
-      }
+    while (!state.exit) {
+      view.update(state)
+      val userCommand = view.readInput()
+      state = Command.from(userCommand).apply(state)
     }
   }
 }
@@ -26,12 +22,10 @@ class Filesystem(input: InputStream, output: OutputStream) {
 object Filesystem {
 
   val root: Directory = Directory.ROOT
-  var state: State = State(root, root)
 
-  def apply(in: InputStream, out: OutputStream): Filesystem =
-    new Filesystem(in, out)
+  def apply(view: FilesystemView) = new Filesystem(view)
 
   def main(args: Array[String]): Unit = {
-    Filesystem(System.in, System.out).run()
+    Filesystem(new ConsoleView).run()
   }
 }

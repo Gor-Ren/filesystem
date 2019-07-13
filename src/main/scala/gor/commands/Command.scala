@@ -9,16 +9,18 @@ trait Command {
 
 object Command {
   val MKDIR = "mkdir"
+  val QUIT = "quit"
 
   /** Returns the command identified by the input argument. */
   def from(input: String): Command = {
     val tokens: Array[String] = input.split(" ")
 
-    if (input.isEmpty || tokens.isEmpty) ErrorCommand.empty
+    if (input.isEmpty || tokens.isEmpty) ErrorCommands.empty
+    else if (tokens(0).equals(QUIT)) Quit
     else if (tokens(0).equals(MKDIR)) {
-      if (tokens.length < 2) ErrorCommand.tooFewArgs(MKDIR)
-      else if (tokens.length > 2) ErrorCommand.tooManyArgs(MKDIR)
+      if (tokens.length < 2) ErrorCommands.tooFewArgs(MKDIR)
+      else if (tokens.length > 2) ErrorCommands.tooManyArgs(MKDIR)
       else new Mkdir(tokens(1))
-    } else ErrorCommand.unknownCommand
+    } else ErrorCommands.unknownCommand
   }
 }

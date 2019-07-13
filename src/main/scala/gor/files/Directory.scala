@@ -21,6 +21,7 @@ object Directory {
   val ROOT_PATH = "/"
 
   def ROOT: Directory = Directory.empty("", "")
+
   def empty(parentPath: String, name: String): Directory = {
     new Directory(parentPath, name, List.empty)
   }

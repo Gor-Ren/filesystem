@@ -1,6 +1,6 @@
 package gor.commands
 
-object ErrorCommand {
+object ErrorCommands {
   def empty: Command = state => state.setMessage("")
 
   def unknownCommand: Command =
