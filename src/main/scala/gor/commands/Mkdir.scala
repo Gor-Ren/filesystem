@@ -14,8 +14,6 @@ class Mkdir(val dirName: String) extends Command {
     val wd = state.wd
     if (wd.hasEntry(dirName)) {
       state.setMessage(s"Entry $dirName already exists.")
-    } else if (dirName.contains(Directory.SEPARATOR)) {
-      state.setMessage(s"$dirName must not contain separators.")
     } else if (!isLegalDirName(dirName)) {
       state.setMessage(s"$dirName: illegal directory name.")
     } else {
@@ -28,11 +26,9 @@ class Mkdir(val dirName: String) extends Command {
     true
   }
 
-  def updateStructure(
-      currentDirectory: Directory,
-      path: List[String],
-      newEntry: DirectoryEntry
-  ): Directory = ???
+  def updateStructure(currentDirectory: Directory,
+                      path: List[String],
+                      newEntry: DirectoryEntry): Directory = ???
 
   def doMkdir(state: State, dirName: String): State = {
     val wd: Directory = state.wd
