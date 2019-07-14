@@ -22,15 +22,10 @@ class Mkdir(val dirName: String) extends Command {
   }
 
   private def isLegalDirName(proposedName: String): Boolean = {
-//    legalDirPattern.matcher(proposedName).matches()
-    true
+    legalDirPattern.matcher(proposedName).matches()
   }
 
-  def updateStructure(currentDirectory: Directory,
-                      path: List[String],
-                      newEntry: DirectoryEntry): Directory = ???
-
-  def doMkdir(state: State, dirName: String): State = {
+  private def doMkdir(state: State, dirName: String): State = {
     val wd: Directory = state.wd
 
     // 1. get all directories in the full path
@@ -47,5 +42,18 @@ class Mkdir(val dirName: String) extends Command {
     val newWd: Directory = newRoot.findDescendant(allDirsInPath)
 
     State(newRoot, newWd)
+  }
+
+  private def updateStructure(currentDirectory: Directory,
+                              path: List[String],
+                              newEntry: DirectoryEntry): Directory = {
+    if (path.isEmpty) currentDirectory.addEntry(newEntry)
+    else {
+      val oldEntry = currentDirectory.findEntry(path.head).get.asDirectory
+      currentDirectory.replaceEntry(
+        oldEntry.name,
+        updateStructure(oldEntry, path.tail, newEntry)
+      )
+    }
   }
 }
