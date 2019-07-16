@@ -3,15 +3,14 @@ package gor.files
 import org.scalatest.{FlatSpec, Matchers}
 
 class DirectoryTest extends FlatSpec with Matchers {
-  val PARENT_PATH = "/parentDir"
   val DIR_NAME = "testDir"
   val SUBDIR_NAME = "subDir"
-  val testDir: Directory = Directory.empty(PARENT_PATH, DIR_NAME)
+  val testDir: Directory = Directory.empty(Directory.ROOT_PATH, DIR_NAME)
 
   behavior of "empty Directory factory method"
 
   it should "create a directory with no contents" in {
-    val emptyDir = Directory.empty(PARENT_PATH, DIR_NAME)
+    val emptyDir = Directory.empty(Directory.ROOT_PATH, DIR_NAME)
     emptyDir.contents shouldBe empty
   }
 
@@ -40,14 +39,42 @@ class DirectoryTest extends FlatSpec with Matchers {
 
   behavior of "a directory containing one subdirectory"
 
-  val dirWithOneSubdir: Directory =
-    testDir.addEntry(Directory.empty(PARENT_PATH, SUBDIR_NAME))
+  val subDir: Directory = Directory.empty(testDir.path, SUBDIR_NAME)
+  val parentDir: Directory = testDir.addEntry(subDir)
+
+  it should "contain the subdir in its contents" in {
+    parentDir.contents should contain theSameElementsInOrderAs Seq(subDir)
+  }
 
   it should "return true when tested if it contains subdir name" in {
-    dirWithOneSubdir.hasEntry(SUBDIR_NAME) shouldBe true
+    parentDir.hasEntry(SUBDIR_NAME) shouldBe true
   }
 
   it should "return false when tested if it contains non-subdir name" in {
-    dirWithOneSubdir.hasEntry("incorrectName") shouldBe false
+    parentDir.hasEntry("incorrectName") shouldBe false
   }
+
+  it should "return its subdir when searched by name" in {
+    parentDir.findEntry(SUBDIR_NAME) shouldBe Some(subDir)
+  }
+
+  it should "remove the subdir when replaced by name" in {
+    val updatedDir =
+      parentDir.replaceEntry(subDir.name,
+                             Directory.empty(parentDir.path, "otherDir"))
+    updatedDir.contents should contain noElementsOf Seq(subDir)
+  }
+
+  it should "contain the replacement dir when subdir is replaced" in {
+    val replaceDir = Directory.empty(parentDir.path, "otherDir")
+    val updatedDir = parentDir.replaceEntry(subDir.name, replaceDir)
+    updatedDir.contents should contain theSameElementsInOrderAs Seq(replaceDir)
+  }
+
+  behavior of "a directory containing multiple subdirs"
+  val numOfSubDirs = 5
+
+  val subDirs: List[Directory] =
+    (for (i <- 0 until numOfSubDirs)
+      yield Directory.empty(parentDir.path, "subdir" + i)).toList
 }

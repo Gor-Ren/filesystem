@@ -56,7 +56,7 @@ class FilesystemIntTest extends FlatSpec with Matchers with BeforeAndAfter {
     filesystem.run()
     view.getOutputs should contain theSameElementsInOrderAs Seq(
       "",
-      "mkdir: too many arguments."
+      "/" + dirName + "/"
     )
   }
 }

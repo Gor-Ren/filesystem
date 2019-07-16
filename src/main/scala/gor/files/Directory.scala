@@ -73,7 +73,7 @@ class Directory(override val parentPath: String,
       new Directory(
         parentPath,
         removeName,
-        contents.filter(e => !e.name.equals(removeName)) :+ newEntry
+        contents.filterNot(e => e.name.equals(removeName)) :+ newEntry
       )
 
   override def asDirectory: Directory = this
